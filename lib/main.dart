@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/providers/my_changenotifier_provider.dart';
 import 'package:my_karaoke_new_sql/screens/my_changenotifierprovider_screen.dart';
+import 'package:my_karaoke_new_sql/screens/songs_list_screen.dart';
+import 'package:my_karaoke_new_sql/screens/sql_test_gg_screen.dart';
+import 'package:my_karaoke_new_sql/screens/test_data_create.dart';
 import 'package:provider/provider.dart';
+
+import 'datas/song_item.dart';
+import 'db/db_helper.dart';
 
 void main() => runApp(const MyApp());
 
@@ -45,6 +51,23 @@ class MyHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
+                      return const TestDataCreate();
+                    }),
+                  );
+                },
+                child: const Text(
+                  'Test SQL Manage',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
                       return const MyChangeNotifierProviderScreen();
                     }),
                   );
@@ -54,10 +77,69 @@ class MyHomePage extends StatelessWidget {
                   style: TextStyle(fontSize: 20),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const SongsListScreen();
+                    }),
+                  );
+                },
+                child: const Text(
+                  'My Song Load',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const SongsListScreen();
+                    }),
+                  );
+                },
+                child: const Text(
+                  'My Song Test data load ',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const SQLTestGGScreen();
+                    }),
+                  );
+                },
+                child: const Text(
+                  'SQL Test -- GG Teacher',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future showData() async {
+    DbHelper helper = DbHelper();
+    List<SongItem>? songList;
+    await helper.openDb();
+    songList = await helper.getLists();
+    print(songList.length);
   }
 }
