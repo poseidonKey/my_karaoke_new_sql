@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/providers/my_changenotifier_provider.dart';
+import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
 import 'package:my_karaoke_new_sql/screens/my_changenotifierprovider_screen.dart';
 import 'package:my_karaoke_new_sql/screens/songs_list_screen.dart';
 import 'package:my_karaoke_new_sql/screens/sql_test_gg_screen.dart';
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<MyChangeNotifierProviderModel>(
           create: (_) => MyChangeNotifierProviderModel(),
         ),
+        ChangeNotifierProvider<MySongChangeNotifierProviderModel>(
+          create: (_) => MySongChangeNotifierProviderModel(),
+        )
       ],
       child: const MaterialApp(
         title: 'My Like Songs',

@@ -47,7 +47,8 @@ class TestDataCreate extends StatelessWidget {
     try {
       DbHelper helper = DbHelper();
       await helper.openDb();
-      await helper.deleteAllList();
+      var result = await helper.deleteAllList();
+      if (result == 'success') print("Success");
     } catch (e) {
       print(e);
     }

@@ -23,6 +23,9 @@ class DbHelper {
 
   Future<List<SongItem>> getLists() async {
     final List<Map<String, dynamic>> maps = await db!.query('mysongs');
+    if (maps.isEmpty) {
+      return [];
+    }
 
     return List.generate(maps.length, (i) {
       return SongItem(maps[i]["id"].toString(), maps[i]["songName"],
@@ -45,7 +48,7 @@ class DbHelper {
   }
 
   Future<String> deleteAllList() async {
-    int id = await db!.delete("mysongs");
+    await db!.delete("mysongs");
     return 'delete success';
   }
 

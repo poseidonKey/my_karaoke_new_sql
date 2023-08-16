@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import '../datas/song_item.dart';
-import '../db/db_helper.dart';
+import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
+import 'package:provider/provider.dart';
 
-class SongsListScreen extends StatefulWidget {
+class SongsListScreen extends StatelessWidget {
   const SongsListScreen({super.key});
-
-  @override
-  State<SongsListScreen> createState() => _SongsListScreenState();
-}
-
-class _SongsListScreenState extends State<SongsListScreen> {
-  DbHelper helper = DbHelper();
-  List<SongItem>? songList;
-  @override
-  void initState() {
-    super.initState();
-    showData();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,44 +11,44 @@ class _SongsListScreenState extends State<SongsListScreen> {
       appBar: AppBar(
         title: const Text("Sqflite"),
       ),
-      body: ListView.builder(
-        itemCount: (songList != null) ? songList!.length : 0,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(songList![index].songName),
-            // title:Text(songItemController.songItem.value.songName),
-            leading: CircleAvatar(
-              child: Text(
-                songList![index].id.toString(),
-                // songItemController.songItem.value.id.toString(),
-              ),
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () {},
-            ),
+      body: Consumer<MySongChangeNotifierProviderModel>(
+        builder: (context, mySongCnprovider, child) {
+          return ListView.builder(
+            itemCount: mySongCnprovider.myItems.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(mySongCnprovider.myItems[index].songName),
+                // title:Text(songItemController.songItem.value.songName),
+                leading: CircleAvatar(
+                  child: Text(
+                    mySongCnprovider.myItems[index].id.toString(),
+                    // songItemController.songItem.value.id.toString(),
+                  ),
+                ),
+                trailing: IconButton(
+                  icon: (mySongCnprovider.myItems[index].songFavorite == 'true')
+                      ? const Icon(
+                          Icons.favorite_border,
+                          color: Colors.red,
+                        )
+                      : const Icon(Icons.favorite_border_outlined),
+                  onPressed: () {
+                    mySongCnprovider.favChange(index);
+                  },
+                ),
+              );
+            },
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          var song = Provider.of<MySongChangeNotifierProviderModel>(context,
+              listen: false);
+          song.getAllSongs();
+        },
+        child: const Text('Load'),
+      ),
     );
-    // return Scaffold(
-    //   body: ListView.builder(
-    //     itemBuilder: (context, index) {
-    //       return ListTile(
-    //         title: Text('Item : $index'),
-    //       );
-    //     },
-    //     itemCount: 30,
-    //   ),
-    // );
-  }
-
-  Future showData() async {
-    await helper.openDb();
-    songList = await helper.getLists();
-    print(songList![0].songName);
-    setState(() {
-      songList = songList;
-    });
   }
 }
