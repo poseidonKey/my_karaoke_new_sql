@@ -6,7 +6,6 @@ import 'package:my_karaoke_new_sql/screens/songs_list_screen.dart';
 import 'package:my_karaoke_new_sql/screens/sql_test_gg_screen.dart';
 import 'package:my_karaoke_new_sql/screens/test_data_create.dart';
 import 'package:provider/provider.dart';
-
 import 'datas/song_item.dart';
 import 'db/db_helper.dart';
 

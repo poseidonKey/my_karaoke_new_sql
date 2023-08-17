@@ -3,8 +3,12 @@ import '../datas/song_item.dart';
 import '../db/db_helper.dart';
 
 class MySongChangeNotifierProviderModel extends ChangeNotifier {
-  final List<SongItem> _myItems = [];
+  List<SongItem> _myItems = [];
   List<SongItem> get myItems => _myItems;
+  set myItems(List<SongItem> val) {
+    _myItems = val;
+    notifyListeners();
+  }
 
   void getAllSongs() {
     showData();
@@ -45,6 +49,7 @@ class MySongChangeNotifierProviderModel extends ChangeNotifier {
       songList = songList;
     }
     print(songList);
-    _myItems.addAll(songList);
+    myItems = songList;
+    // _myItems.addAll(songList);
   }
 }

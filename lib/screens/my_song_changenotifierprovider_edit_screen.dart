@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/my_changenotifier_provider.dart';
+import '../providers/my_song_changenotifier_provider_model.dart';
 
-class MyChangeNotifierProviderEditScreen extends StatelessWidget {
+class MySongChangeNotifierProviderEditScreen extends StatelessWidget {
   final int choiceItem;
-  const MyChangeNotifierProviderEditScreen(
+  const MySongChangeNotifierProviderEditScreen(
       {super.key, required this.choiceItem});
   @override
   Widget build(BuildContext context) {
@@ -19,12 +19,12 @@ class MyChangeNotifierProviderEditScreen extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Consumer<MyChangeNotifierProviderModel>(
+        child: Consumer<MySongChangeNotifierProviderModel>(
           builder: (context, myCnprovider, child) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('data : ${myCnprovider.myItems[choiceItem].mData}'),
+                Text('data : ${myCnprovider.myItems[choiceItem].songName}'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
