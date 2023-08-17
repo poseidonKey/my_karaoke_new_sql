@@ -48,7 +48,7 @@ class MySongChangeNotifierProviderModel extends ChangeNotifier {
     } else {
       songList = songList;
     }
-    print(songList);
+    // print(songList);
     myItems = songList;
     // _myItems.addAll(songList);
   }

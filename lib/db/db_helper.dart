@@ -1,6 +1,5 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../datas/song_item.dart';
 
 class DbHelper {
@@ -45,6 +44,13 @@ class DbHelper {
   Future<int> deleteList(SongItem list) async {
     int id = await db!.delete("mysongs", where: "id = ?", whereArgs: [list.id]);
     return id;
+  }
+
+  Future<void> changeFavority(SongItem list, String val) async {
+    // print(val);
+    // print(list.id);
+    await db!.rawUpdate(
+        "update mysongs set 'songFavorite'=$val where id=${list.id}");
   }
 
   Future<String> deleteAllList() async {

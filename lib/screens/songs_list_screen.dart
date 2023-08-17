@@ -72,8 +72,12 @@ class _SongsListScreenState extends State<SongsListScreen> {
                           color: Colors.red,
                         )
                       : const Icon(Icons.favorite_border_outlined),
-                  onPressed: () {
+                  onPressed: () async {
                     mySongCnprovider.favChange(index);
+                    DbHelper helper = DbHelper();
+                    await helper.openDb();
+                    await helper.changeFavority(mySongCnprovider.myItems[index],
+                        mySongCnprovider.myItems[index].songFavorite);
                   },
                 ),
               );
