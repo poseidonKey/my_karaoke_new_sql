@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         title: 'My Like Songs',
+        debugShowCheckedModeBanner: false,
         home: MyHomePage(),
       ),
     );

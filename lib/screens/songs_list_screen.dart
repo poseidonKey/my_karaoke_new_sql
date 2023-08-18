@@ -13,6 +13,10 @@ class SongsListScreen extends StatefulWidget {
 }
 
 class _SongsListScreenState extends State<SongsListScreen> {
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle1 =
+      TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   @override
   void initState() {
     super.initState();
@@ -29,20 +33,95 @@ class _SongsListScreenState extends State<SongsListScreen> {
         title: const Text("Sqflite"),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.sports_basketball),
+            onPressed: () async {
+              DbHelper helper = DbHelper();
+              await helper.openDb();
+              var t = SongItem(null, 'append item', '발라드', 'false');
+              await helper.insertList(t);
+              var app = Provider.of<MySongChangeNotifierProviderModel>(context,
+                  listen: false);
+              app.getAllSongs();
+            },
+            icon: const Icon(Icons.add_task_outlined),
           )
         ],
       ),
+      drawer: Drawer(
+        width: MediaQuery.of(context).size.width * .5,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                '애창곡 jangre',
+                style: optionStyle,
+              ),
+            ),
+            ListTile(
+              title: const Text(
+                '발라드',
+                style: optionStyle1,
+              ),
+              onTap: () {
+                print(Janre.BALLADE);
+              },
+            ),
+            ListTile(
+              title: const Text(
+                '댄스',
+                style: optionStyle1,
+              ),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text(
+                '트로트',
+                style: optionStyle1,
+              ),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text(
+                '팝',
+                style: optionStyle1,
+              ),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text(
+                '클래식',
+                style: optionStyle1,
+              ),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+          ],
+        ),
+      ),
       body: Consumer<MySongChangeNotifierProviderModel>(
         builder: (context, mySongCnprovider, child) {
-          return ListView.builder(
+          return ListView.separated(
             itemCount: mySongCnprovider.myItems.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 // title: Text(mySongCnprovider.myItems[index].songName),
                 title: GestureDetector(
-                  child: Text(mySongCnprovider.myItems[index].songName),
+                  child: Text(
+                      '${mySongCnprovider.myItems[index].songName}, ${mySongCnprovider.myItems[index].songFavorite},'),
                   onTap: () async {
                     var result = await Navigator.push(
                       context,
@@ -61,6 +140,8 @@ class _SongsListScreenState extends State<SongsListScreen> {
                   },
                 ),
                 leading: CircleAvatar(
+                  radius: 15,
+                  foregroundColor: Colors.deepPurpleAccent,
                   child: Text(
                     mySongCnprovider.myItems[index].id.toString(),
                   ),
@@ -78,24 +159,23 @@ class _SongsListScreenState extends State<SongsListScreen> {
                     await helper.openDb();
                     await helper.changeFavority(mySongCnprovider.myItems[index],
                         mySongCnprovider.myItems[index].songFavorite);
+                    var app = Provider.of<MySongChangeNotifierProviderModel>(
+                        context,
+                        listen: false);
+                    app.getAllSongs();
                   },
                 ),
               );
             },
+            separatorBuilder: (BuildContext context, int index) => SizedBox(
+              height: 5,
+              child: Container(
+                color: Colors.grey.shade300,
+                width: 100,
+              ),
+            ),
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          DbHelper helper = DbHelper();
-          await helper.openDb();
-          var t = SongItem(null, 'append item', 'false');
-          await helper.insertList(t);
-          var app = Provider.of<MySongChangeNotifierProviderModel>(context,
-              listen: false);
-          app.getAllSongs();
-        },
-        child: const Text('Append'),
       ),
     );
   }

@@ -15,7 +15,7 @@ class DbHelper {
     db ??= await openDatabase(join(await getDatabasesPath(), 'mysongs.db'),
         onCreate: (database, version) {
       database.execute(
-          'CREATE TABLE mysongs(id INTEGER PRIMARY KEY, songName TEXT, songFavorite text)');
+          'CREATE TABLE mysongs(id INTEGER PRIMARY KEY, songName TEXT, songJanre text, songFavorite text)');
     }, version: version);
     return db!;
   }
@@ -28,7 +28,7 @@ class DbHelper {
 
     return List.generate(maps.length, (i) {
       return SongItem(maps[i]["id"].toString(), maps[i]["songName"],
-          maps[i]["songFavorite"]);
+          maps[i]["songJanre"], maps[i]["songFavorite"]);
     });
   }
 
@@ -47,10 +47,13 @@ class DbHelper {
   }
 
   Future<void> changeFavority(SongItem list, String val) async {
-    // print(val);
-    // print(list.id);
     await db!.rawUpdate(
-        "update mysongs set 'songFavorite'=$val where id=${list.id}");
+        "update mysongs set songFavorite='$val' where id=${list.id}");
+  }
+
+  Future<void> changeSongName(SongItem list, String val) async {
+    await db!
+        .rawUpdate("update mysongs set songName='$val' where id=${list.id}");
   }
 
   Future<String> deleteAllList() async {
@@ -63,7 +66,8 @@ class DbHelper {
     final List<Map<String, dynamic>> maps = await db!.rawQuery(query);
     return maps
         .map(
-          (e) => SongItem(e["id"].toString(), e["songName"], e["songFavorite"]),
+          (e) => SongItem(e["id"].toString(), e["songName"], e["songJanre"],
+              e["songFavorite"]),
         )
         .toList();
   }

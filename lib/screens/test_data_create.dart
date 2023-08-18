@@ -5,6 +5,7 @@ import '../db/db_helper.dart';
 class TestDataCreate extends StatelessWidget {
   const TestDataCreate({super.key});
   final String _songFavorite = "false";
+  final String _songJanre = "발라드";
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +38,54 @@ class TestDataCreate extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                deleteTestDatabase();
+              },
+              child: const Text(
+                'Test SQL database 지우기',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                deleteTestTable();
+              },
+              child: const Text(
+                'Test SQL Table 지우기',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void deleteTestDatabase() async {
+    try {
+      DbHelper helper = DbHelper();
+      await helper.openDb();
+      await helper.db!.rawQuery("drop database if exists mysongs");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void deleteTestTable() async {
+    try {
+      DbHelper helper = DbHelper();
+      await helper.openDb();
+      await helper.db!.rawQuery("drop table if exists mysongs");
+    } catch (e) {
+      print(e);
+    }
   }
 
   void deleteTestData() async {
@@ -61,7 +106,8 @@ class TestDataCreate extends StatelessWidget {
       DbHelper helper = DbHelper();
       await helper.openDb();
       for (int i = 0; i < 30; i++) {
-        final song = SongItem(null, 'Song item ${cnt++}', _songFavorite);
+        final song =
+            SongItem(null, 'Song item ${cnt++}', _songJanre, _songFavorite);
         await helper.insertList(song);
         // print('success');
       }
