@@ -15,7 +15,7 @@ class DbHelper {
     db ??= await openDatabase(join(await getDatabasesPath(), 'mysongs.db'),
         onCreate: (database, version) {
       database.execute(
-          'CREATE TABLE mysongs(id INTEGER PRIMARY KEY, songName TEXT, songJanre text, songFavorite text)');
+          'CREATE TABLE mysongs(id INTEGER PRIMARY KEY, songName TEXT, songGYNumber text, songTJNumber text, songJanre text, songUtubeAddress text, songETC text, songCreateTime text, songFavorite text)');
     }, version: version);
     return db!;
   }
@@ -27,8 +27,16 @@ class DbHelper {
     }
 
     return List.generate(maps.length, (i) {
-      return SongItem(maps[i]["id"].toString(), maps[i]["songName"],
-          maps[i]["songJanre"], maps[i]["songFavorite"]);
+      return SongItem(
+          maps[i]["id"].toString(),
+          maps[i]["songName"],
+          maps[i]["songGYNumber"],
+          maps[i]["songTJNumber"],
+          maps[i]["songJanre"],
+          maps[i]["songUtubeAddress"],
+          maps[i]["songETC"],
+          maps[i]["songCreateTime"],
+          maps[i]["songFavorite"]);
     });
   }
 
@@ -66,7 +74,15 @@ class DbHelper {
     final List<Map<String, dynamic>> maps = await db!.rawQuery(query);
     return maps
         .map(
-          (e) => SongItem(e["id"].toString(), e["songName"], e["songJanre"],
+          (e) => SongItem(
+              e["id"].toString(),
+              e["songName"],
+              e["songGYNumber"],
+              e["songTJNumber"],
+              e["songJanre"],
+              e["songUtubeAddress"],
+              e["songETC"],
+              e["songCreateTime"],
               e["songFavorite"]),
         )
         .toList();

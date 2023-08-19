@@ -36,7 +36,16 @@ class _SongsListScreenState extends State<SongsListScreen> {
             onPressed: () async {
               DbHelper helper = DbHelper();
               await helper.openDb();
-              var t = SongItem(null, 'append item', '발라드', 'false');
+              var t = SongItem(
+                  null,
+                  "append item",
+                  "songGYNumber",
+                  "songTJNumber",
+                  '발라드',
+                  "songUtubeAddress",
+                  "songETC",
+                  "2022.1.1",
+                  "false");
               await helper.insertList(t);
               var app = Provider.of<MySongChangeNotifierProviderModel>(context,
                   listen: false);
@@ -118,10 +127,9 @@ class _SongsListScreenState extends State<SongsListScreen> {
             itemCount: mySongCnprovider.myItems.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                // title: Text(mySongCnprovider.myItems[index].songName),
                 title: GestureDetector(
                   child: Text(
-                      '${mySongCnprovider.myItems[index].songName}, ${mySongCnprovider.myItems[index].songFavorite},'),
+                      '${mySongCnprovider.myItems[index].songName} -- ${mySongCnprovider.myItems[index].songJanre}'),
                   onTap: () async {
                     var result = await Navigator.push(
                       context,

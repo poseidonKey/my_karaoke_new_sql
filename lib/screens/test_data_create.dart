@@ -4,8 +4,6 @@ import '../db/db_helper.dart';
 
 class TestDataCreate extends StatelessWidget {
   const TestDataCreate({super.key});
-  final String _songFavorite = "false";
-  final String _songJanre = "발라드";
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +103,15 @@ class TestDataCreate extends StatelessWidget {
     try {
       DbHelper helper = DbHelper();
       await helper.openDb();
+      String songJanre = "";
+
       for (int i = 0; i < 30; i++) {
-        final song =
-            SongItem(null, 'Song item ${cnt++}', _songJanre, _songFavorite);
+        if (i % 3 == 0) songJanre = "가요";
+        if (i % 3 == 1) songJanre = "팝";
+        if (i % 3 == 2) songJanre = "트로트";
+        final song = SongItem(null, "song Name", "songGYNumber", "songTJNumber",
+            songJanre, "songUtubeAddress", "songETC", "2022.1.1", "false");
+
         await helper.insertList(song);
         // print('success');
       }
