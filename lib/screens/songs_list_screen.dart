@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/datas/song_item.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
+import 'package:my_karaoke_new_sql/screens/my_song_janre_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_search_screen.dart';
 import 'package:provider/provider.dart';
 import '../db/db_helper.dart';
@@ -49,12 +50,11 @@ class _SongsListScreenState extends State<SongsListScreen> {
           ),
           IconButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const MySongSearchScreen(),
                   ),
-                  ((route) => false),
                 );
               },
               icon: const Icon(Icons.search)),
@@ -135,16 +135,16 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 style: optionStyle1,
               ),
               onTap: () async {
-                DbHelper helper = DbHelper();
-                await helper.openDb();
-                var result = await helper.searchList("트로트", "songJanre");
-                print("--------");
-                for (SongItem element in result) {
-                  print(element.songName);
-                  print(element.songJanre);
-                  print(element.songFavorite);
-                }
                 Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MySongJanreScreen(
+                      janreData: '트로트',
+                      janre: 'songJanre',
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -153,14 +153,16 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 style: optionStyle1,
               ),
               onTap: () async {
-                DbHelper helper = DbHelper();
-                await helper.openDb();
-                var result = await helper.searchList("팝", "songJanre");
-                print(result);
-                for (var element in result) {
-                  print("${element.songName}, J : ${element.songJanre}");
-                }
                 Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MySongJanreScreen(
+                      janreData: '팝',
+                      janre: 'songJanre',
+                    ),
+                  ),
+                );
               },
             ),
             ListTile(

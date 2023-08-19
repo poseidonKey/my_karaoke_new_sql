@@ -6,65 +6,53 @@ import '../datas/song_item.dart';
 import '../db/db_helper.dart';
 import 'my_song_changenotifierprovider_edit_screen.dart';
 
-class MySongSearchScreen extends StatefulWidget {
-  const MySongSearchScreen({super.key});
+class MySongJanreScreen extends StatefulWidget {
+  final String janre;
+  final String janreData;
+  const MySongJanreScreen({
+    super.key,
+    required this.janreData,
+    required this.janre,
+  });
 
   @override
-  State<MySongSearchScreen> createState() => _MySongSearchScreenState();
+  State<MySongJanreScreen> createState() => _MySongJanreScreenState();
 }
 
-class _MySongSearchScreenState extends State<MySongSearchScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //     Provider.of<MySongSearchProviderModel>(context, listen: false)
-  //         .getAllSongs();
-  //   });
-  // }
+class _MySongJanreScreenState extends State<MySongJanreScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      DbHelper helper = DbHelper();
+      await helper.openDb();
+      Provider.of<MySongSearchProviderModel>(context, listen: false)
+          .getSearchSongs(widget.janreData, widget.janre);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search"),
+        title: const Text("Janre"),
       ),
       body: Consumer<MySongSearchProviderModel>(
         builder: (context, mySongCnprovider, child) {
           return Column(
             children: [
-              TextFormField(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      DbHelper helper = DbHelper();
-                      await helper.openDb();
-                      Provider.of<MySongSearchProviderModel>(context,
-                              listen: false)
-                          .getAllSongs();
-                    },
-                    child: const Text('Search'),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Provider.of<MySongSearchProviderModel>(context,
-                              listen: false)
-                          .myItems = [];
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SongsListScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Back'),
-                  )
-                ],
+              ElevatedButton(
+                onPressed: () {
+                  Provider.of<MySongSearchProviderModel>(context, listen: false)
+                      .myItems = [];
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SongsListScreen(),
+                    ),
+                  );
+                },
+                child: const Text('Back'),
               ),
               Expanded(
                 child: ListView.builder(

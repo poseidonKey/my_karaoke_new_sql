@@ -15,6 +15,11 @@ class MySongSearchProviderModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void getSearchSongs(String searchData, String target) {
+    showSearchData(searchData, target);
+    notifyListeners();
+  }
+
   void favChange(int val) {
     _myItems[val].songFavorite = (_myItems[val].songFavorite == 'true')
         ? _myItems[val].songFavorite = 'false'
@@ -42,7 +47,20 @@ class MySongSearchProviderModel extends ChangeNotifier {
     DbHelper helper = DbHelper();
     List<SongItem> songList;
     await helper.openDb();
-    songList = await helper.searchList("3", "songName");
+    songList = await helper.getLists();
+    if (songList.isEmpty) {
+      songList = [];
+    } else {
+      songList = songList;
+    }
+    myItems = songList;
+  }
+
+  Future showSearchData(String searchData, String target) async {
+    DbHelper helper = DbHelper();
+    List<SongItem> songList;
+    await helper.openDb();
+    songList = await helper.searchList(searchData, target);
     if (songList.isEmpty) {
       songList = [];
     } else {
