@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/datas/song_item.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
+import 'package:my_karaoke_new_sql/screens/my_song_search_screen.dart';
 import 'package:provider/provider.dart';
 import '../db/db_helper.dart';
 import 'my_song_changenotifierprovider_edit_screen.dart';
 
 class SongsListScreen extends StatefulWidget {
   const SongsListScreen({super.key});
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   State<SongsListScreen> createState() => _SongsListScreenState();
@@ -26,6 +28,14 @@ class _SongsListScreenState extends State<SongsListScreen> {
     });
   }
 
+  // toggleDrawer() async {
+  //   if (widget._scaffoldKey.currentState!.isDrawerOpen) {
+  //     widget._scaffoldKey.currentState!.openEndDrawer();
+  //   } else {
+  //     widget._scaffoldKey.currentState!.openDrawer();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,13 +48,14 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
           ),
           IconButton(
-              onPressed: () async {
-                DbHelper helper = DbHelper();
-                await helper.openDb();
-                var result = await helper.searchList("3", "songName");
-                for (SongItem element in result) {
-                  print(element.songName);
-                }
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MySongSearchScreen(),
+                  ),
+                  ((route) => false),
+                );
               },
               icon: const Icon(Icons.search)),
           const Text(
@@ -133,6 +144,7 @@ class _SongsListScreenState extends State<SongsListScreen> {
                   print(element.songJanre);
                   print(element.songFavorite);
                 }
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -148,6 +160,7 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 for (var element in result) {
                   print("${element.songName}, J : ${element.songJanre}");
                 }
+                Navigator.pop(context);
               },
             ),
             ListTile(
