@@ -74,8 +74,14 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 '발라드',
                 style: optionStyle1,
               ),
-              onTap: () {
+              onTap: () async {
                 print(Janre.BALLADE);
+                DbHelper helper = DbHelper();
+                await helper.openDb();
+                var result = await helper.searchList("발라드", "songJanre");
+                for (var element in result) {
+                  print(element);
+                }
               },
             ),
             ListTile(
@@ -93,9 +99,15 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 '트로트',
                 style: optionStyle1,
               ),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              onTap: () async {
+                DbHelper helper = DbHelper();
+                await helper.openDb();
+                var result = await helper.searchList("트로트", "songJanre");
+                print("--------");
+                for (SongItem element in result) {
+                  print(element.songName);
+                  print(element.songJanre);
+                }
               },
             ),
             ListTile(
@@ -103,9 +115,14 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 '팝',
                 style: optionStyle1,
               ),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              onTap: () async {
+                DbHelper helper = DbHelper();
+                await helper.openDb();
+                var result = await helper.searchList("팝", "songJanre");
+                print(result);
+                for (var element in result) {
+                  print("${element.songName}, J : ${element.songJanre}");
+                }
               },
             ),
             ListTile(

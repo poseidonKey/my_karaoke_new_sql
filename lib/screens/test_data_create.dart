@@ -109,8 +109,16 @@ class TestDataCreate extends StatelessWidget {
         if (i % 3 == 0) songJanre = "가요";
         if (i % 3 == 1) songJanre = "팝";
         if (i % 3 == 2) songJanre = "트로트";
-        final song = SongItem(null, "song Name", "songGYNumber", "songTJNumber",
-            songJanre, "songUtubeAddress", "songETC", "2022.1.1", "false");
+        final song = SongItem(
+            null,
+            "song Name ${cnt++}",
+            "songGYNumber",
+            "songTJNumber",
+            songJanre,
+            "songUtubeAddress",
+            "songETC",
+            "2022.1.1",
+            "false");
 
         await helper.insertList(song);
         // print('success');

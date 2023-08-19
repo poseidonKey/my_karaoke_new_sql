@@ -69,8 +69,8 @@ class DbHelper {
     return 'delete success';
   }
 
-  Future<List<SongItem>> searchList(String searchTerm) async {
-    String query = "select * from mysongs where songName like '%$searchTerm%'";
+  Future<List<SongItem>> searchList(String searchTerm, String target) async {
+    String query = "select * from mysongs where $target like '%$searchTerm%'";
     final List<Map<String, dynamic>> maps = await db!.rawQuery(query);
     return maps
         .map(
