@@ -32,6 +32,26 @@ class _SongsListScreenState extends State<SongsListScreen> {
       appBar: AppBar(
         title: const Text("Sqflite"),
         actions: [
+          const Text(
+            '곡찾기',
+            style: TextStyle(
+                fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+          IconButton(
+              onPressed: () async {
+                DbHelper helper = DbHelper();
+                await helper.openDb();
+                var result = await helper.searchList("3", "songName");
+                for (SongItem element in result) {
+                  print(element.songName);
+                }
+              },
+              icon: const Icon(Icons.search)),
+          const Text(
+            '곡추가',
+            style: TextStyle(
+                fontSize: 15, color: Colors.red, fontWeight: FontWeight.w100),
+          ),
           IconButton(
             onPressed: () async {
               DbHelper helper = DbHelper();
@@ -89,9 +109,13 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 '댄스',
                 style: optionStyle1,
               ),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              onTap: () async {
+                DbHelper helper = DbHelper();
+                await helper.openDb();
+                var result = await helper.searchList("댄스", "songJanre");
+                for (var element in result) {
+                  print(element);
+                }
               },
             ),
             ListTile(
@@ -107,6 +131,7 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 for (SongItem element in result) {
                   print(element.songName);
                   print(element.songJanre);
+                  print(element.songFavorite);
                 }
               },
             ),
@@ -130,9 +155,13 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 '클래식',
                 style: optionStyle1,
               ),
-              onTap: () {
-                // Update the state of the app.
-                // ...
+              onTap: () async {
+                DbHelper helper = DbHelper();
+                await helper.openDb();
+                var result = await helper.searchList("클래식", "songJanre");
+                for (var element in result) {
+                  print(element);
+                }
               },
             ),
           ],
