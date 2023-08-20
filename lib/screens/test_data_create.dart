@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_karaoke_new_sql/datas/song_item_category.dart';
+import 'package:my_karaoke_new_sql/db/db_helper_cate.dart';
 import '../datas/song_item.dart';
 import '../db/db_helper.dart';
 
@@ -21,6 +23,18 @@ class TestDataCreate extends StatelessWidget {
               },
               child: const Text(
                 'Test SQL Create 30 piece',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                makeTestCategoryData();
+              },
+              child: const Text(
+                'Test SQL Category make',
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -92,6 +106,23 @@ class TestDataCreate extends StatelessWidget {
       await helper.openDb();
       var result = await helper.deleteAllList();
       if (result == 'success') print("Success");
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void makeTestCategoryData() async {
+    try {
+      DbHelperCategory helper = DbHelperCategory();
+      await helper.openDbCategory();
+      List<String> cateList = ["가요", "팝", "댄스", "트로트", "발라드", "클래식"];
+      cateList.forEach((element) async {
+        final songCate = SongItemCategory(
+          null,
+          element,
+        );
+        await helper.insertList(songCate);
+      });
     } catch (e) {
       print(e);
     }

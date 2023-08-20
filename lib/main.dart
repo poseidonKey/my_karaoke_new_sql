@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/providers/my_changenotifier_provider.dart';
+import 'package:my_karaoke_new_sql/providers/my_song_category_provider_model%20.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_search_provider_model.dart';
 import 'package:my_karaoke_new_sql/screens/my_changenotifierprovider_screen.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<MySongSearchProviderModel>(
           create: (_) => MySongSearchProviderModel(),
+        ),
+        ChangeNotifierProvider<MySongCategoryProviderModel>(
+          create: (_) => MySongCategoryProviderModel(),
         )
       ],
       child: const MaterialApp(
@@ -76,6 +80,23 @@ class MyHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
+                      return const SongsListScreen();
+                    }),
+                  );
+                },
+                child: const Text(
+                  'My Song Test data load ',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
                       return const MyChangeNotifierProviderScreen();
                     }),
                   );
@@ -93,29 +114,12 @@ class MyHomePage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) {
-                      return SongsListScreen();
+                      return const SongsListScreen();
                     }),
                   );
                 },
                 child: const Text(
                   'My Song Load',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return SongsListScreen();
-                    }),
-                  );
-                },
-                child: const Text(
-                  'My Song Test data load ',
                   style: TextStyle(fontSize: 20),
                 ),
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/datas/song_item.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_favority_screen.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
+import 'package:my_karaoke_new_sql/screens/my_song_janre_category_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_search_screen.dart';
 import 'package:provider/provider.dart';
@@ -197,70 +198,120 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 }
               },
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              child: Container(
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text(
+                    "category 관리",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MySongJanreCategoryScreen(),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),
       body: Consumer<MySongChangeNotifierProviderModel>(
         builder: (context, mySongCnprovider, child) {
-          return ListView.separated(
-            itemCount: mySongCnprovider.myItems.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: GestureDetector(
-                  child: Text(
-                      '${mySongCnprovider.myItems[index].songName} -- ${mySongCnprovider.myItems[index].songJanre}'),
-                  onTap: () async {
-                    var result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => MySongChangeNotifierProviderEditScreen(
-                          choiceItem: index,
+          return Column(
+            children: [
+              Text(
+                '현재 등록 된 곡수 : ${mySongCnprovider.myItems.length} 개',
+                style: const TextStyle(
+                    color: Colors.lightBlue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              SizedBox(
+                height: 5,
+                child: Container(
+                  color: Colors.grey,
+                ),
+              ),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: mySongCnprovider.myItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: GestureDetector(
+                        child: Text(
+                            '${mySongCnprovider.myItems[index].songName} -- ${mySongCnprovider.myItems[index].songJanre}'),
+                        onTap: () async {
+                          var result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  MySongChangeNotifierProviderEditScreen(
+                                choiceItem: index,
+                              ),
+                            ),
+                          );
+                          // print('result : $result');
+                          if (result != null) {
+                            SongItem val = mySongCnprovider.myItems[index];
+                            val.songName = '${val.songName}--- $result';
+                            mySongCnprovider.editItem(val, index);
+                          }
+                        },
+                      ),
+                      leading: CircleAvatar(
+                        radius: 15,
+                        foregroundColor: Colors.deepPurpleAccent,
+                        child: Text(
+                          mySongCnprovider.myItems[index].id.toString(),
                         ),
                       ),
+                      trailing: IconButton(
+                        icon: (mySongCnprovider.myItems[index].songFavorite ==
+                                'true')
+                            ? const Icon(
+                                Icons.favorite_border,
+                                color: Colors.red,
+                              )
+                            : const Icon(Icons.favorite_border_outlined),
+                        onPressed: () async {
+                          mySongCnprovider.favChange(index);
+                          DbHelper helper = DbHelper();
+                          await helper.openDb();
+                          await helper.changeFavority(
+                              mySongCnprovider.myItems[index],
+                              mySongCnprovider.myItems[index].songFavorite);
+                          var app =
+                              Provider.of<MySongChangeNotifierProviderModel>(
+                                  context,
+                                  listen: false);
+                          app.getAllSongs();
+                        },
+                      ),
                     );
-                    // print('result : $result');
-                    if (result != null) {
-                      SongItem val = mySongCnprovider.myItems[index];
-                      val.songName = '${val.songName}--- $result';
-                      mySongCnprovider.editItem(val, index);
-                    }
                   },
-                ),
-                leading: CircleAvatar(
-                  radius: 15,
-                  foregroundColor: Colors.deepPurpleAccent,
-                  child: Text(
-                    mySongCnprovider.myItems[index].id.toString(),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      SizedBox(
+                    height: 5,
+                    child: Container(
+                      color: Colors.grey.shade300,
+                      width: 100,
+                    ),
                   ),
                 ),
-                trailing: IconButton(
-                  icon: (mySongCnprovider.myItems[index].songFavorite == 'true')
-                      ? const Icon(
-                          Icons.favorite_border,
-                          color: Colors.red,
-                        )
-                      : const Icon(Icons.favorite_border_outlined),
-                  onPressed: () async {
-                    mySongCnprovider.favChange(index);
-                    DbHelper helper = DbHelper();
-                    await helper.openDb();
-                    await helper.changeFavority(mySongCnprovider.myItems[index],
-                        mySongCnprovider.myItems[index].songFavorite);
-                    var app = Provider.of<MySongChangeNotifierProviderModel>(
-                        context,
-                        listen: false);
-                    app.getAllSongs();
-                  },
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
-              height: 5,
-              child: Container(
-                color: Colors.grey.shade300,
-                width: 100,
               ),
-            ),
+            ],
           );
         },
       ),
