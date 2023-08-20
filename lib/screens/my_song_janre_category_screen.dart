@@ -3,9 +3,8 @@ import 'package:my_karaoke_new_sql/datas/song_item_category.dart';
 import 'package:my_karaoke_new_sql/db/db_helper_cate.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_category_provider_model%20.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_search_provider_model.dart';
-import 'package:my_karaoke_new_sql/screens/songs_list_screen.dart';
 import 'package:provider/provider.dart';
-import 'my_song_changenotifierprovider_edit_screen.dart';
+import 'my_song_janre_category_edit_screen.dart';
 
 class MySongJanreCategoryScreen extends StatefulWidget {
   const MySongJanreCategoryScreen({
@@ -34,24 +33,26 @@ class _MySongJanreCategoryScreenState extends State<MySongJanreCategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Janre Category"),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<MySongSearchProviderModel>(context, listen: false)
+                  .myItems = [];
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MySongJanreCategoryScreen(),
+                ),
+              );
+            },
+            child: const Text('Back'),
+          ),
+        ],
       ),
       body: Consumer<MySongCategoryProviderModel>(
         builder: (context, mySongCnprovider, child) {
           return Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<MySongSearchProviderModel>(context, listen: false)
-                      .myItems = [];
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SongsListScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Back'),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: mySongCnprovider.myItems.length,
@@ -64,8 +65,7 @@ class _MySongJanreCategoryScreenState extends State<MySongJanreCategoryScreen> {
                           var result = await Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  MySongChangeNotifierProviderEditScreen(
+                              builder: (_) => MySongJanreCategoryEditScreen(
                                 choiceItem: int.parse(
                                     mySongCnprovider.myItems[index].id!),
                               ),
@@ -90,6 +90,10 @@ class _MySongJanreCategoryScreenState extends State<MySongJanreCategoryScreen> {
                         child: Text(
                           mySongCnprovider.myItems[index].id.toString(),
                         ),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.edit),
                       ),
                     );
                   },
