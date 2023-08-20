@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/datas/song_item.dart';
+import 'package:my_karaoke_new_sql/screens/my_song_favority_screen.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_search_screen.dart';
@@ -43,6 +44,23 @@ class _SongsListScreenState extends State<SongsListScreen> {
       appBar: AppBar(
         title: const Text("Sqflite"),
         actions: [
+          const Text(
+            '즐찾',
+            style: TextStyle(
+                fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MySongFavorityScreen(
+                      janreData: 'true', janre: 'songFavorite'),
+                ),
+              );
+            },
+            icon: const Icon(Icons.favorite),
+          ),
           const Text(
             '곡찾기',
             style: TextStyle(
