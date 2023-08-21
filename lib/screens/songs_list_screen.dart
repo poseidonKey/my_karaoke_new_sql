@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_karaoke_new_sql/datas/song_item.dart';
+import 'package:my_karaoke_new_sql/screens/my_song_append_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_favority_screen.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_category_screen.dart';
@@ -84,22 +85,17 @@ class _SongsListScreenState extends State<SongsListScreen> {
           ),
           IconButton(
             onPressed: () async {
-              DbHelper helper = DbHelper();
-              await helper.openDb();
-              var t = SongItem(
-                  null,
-                  "append item",
-                  "songGYNumber",
-                  "songTJNumber",
-                  '발라드',
-                  "songUtubeAddress",
-                  "songETC",
-                  "2022.1.1",
-                  "false");
-              await helper.insertList(t);
-              var app = Provider.of<MySongChangeNotifierProviderModel>(context,
-                  listen: false);
-              app.getAllSongs();
+              var result = await Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return const MySongAppendScreen();
+                }),
+              );
+              if (result == "success") {
+                var app = Provider.of<MySongChangeNotifierProviderModel>(
+                    context,
+                    listen: false);
+                app.getAllSongs();
+              }
             },
             icon: const Icon(Icons.add_task_outlined),
           )
