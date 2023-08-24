@@ -36,24 +36,27 @@ class _MySongJanreScreenState extends State<MySongJanreScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Janre"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Provider.of<MySongSearchProviderModel>(context, listen: false)
+                  .myItems = [];
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SongsListScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.door_back_door_outlined),
+          )
+        ],
+        automaticallyImplyLeading: false,
       ),
       body: Consumer<MySongSearchProviderModel>(
         builder: (context, mySongCnprovider, child) {
           return Column(
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<MySongSearchProviderModel>(context, listen: false)
-                      .myItems = [];
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SongsListScreen(),
-                    ),
-                  );
-                },
-                child: const Text('Back'),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: mySongCnprovider.myItems.length,
