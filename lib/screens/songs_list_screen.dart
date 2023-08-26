@@ -5,10 +5,10 @@ import 'package:my_karaoke_new_sql/screens/my_song_favority_screen.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_category_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_screen.dart';
-import 'package:my_karaoke_new_sql/screens/my_song_search_screen.dart';
 import 'package:provider/provider.dart';
 import '../db/db_helper.dart';
 import 'my_song_changenotifierprovider_edit_screen.dart';
+import 'my_song_search_screen.dart';
 
 class SongsListScreen extends StatefulWidget {
   const SongsListScreen({super.key});
@@ -69,25 +69,10 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
           ),
           IconButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MySongSearchScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.search)),
-          const Text(
-            '곡추가',
-            style: TextStyle(
-                fontSize: 15, color: Colors.red, fontWeight: FontWeight.w100),
-          ),
-          IconButton(
             onPressed: () async {
               var result = await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) {
-                  return const MySongAppendScreen();
+                  return const MySongSearchScreen();
                 }),
               );
               if (result == "success") {
@@ -97,142 +82,51 @@ class _SongsListScreenState extends State<SongsListScreen> {
                 app.getAllSongs();
               }
             },
-            icon: const Icon(Icons.add_task_outlined),
+            icon: const Icon(Icons.search),
           )
         ],
       ),
-      drawer: Drawer(
-        width: MediaQuery.of(context).size.width * .5,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                '애창곡 jangre',
-                style: optionStyle,
-              ),
-            ),
-            ListTile(
-              title: const Text(
-                '발라드',
-                style: optionStyle1,
-              ),
-              onTap: () async {
-                print(Janre.BALLADE);
-                DbHelper helper = DbHelper();
-                await helper.openDb();
-                var result = await helper.searchList("발라드", "songJanre");
-                for (var element in result) {
-                  print(element);
-                }
-              },
-            ),
-            ListTile(
-              title: const Text(
-                '댄스',
-                style: optionStyle1,
-              ),
-              onTap: () async {
-                DbHelper helper = DbHelper();
-                await helper.openDb();
-                var result = await helper.searchList("댄스", "songJanre");
-                for (var element in result) {
-                  print(element);
-                }
-              },
-            ),
-            ListTile(
-              title: const Text(
-                '트로트',
-                style: optionStyle1,
-              ),
-              onTap: () async {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MySongJanreScreen(
-                      janreData: '트로트',
-                      janre: 'songJanre',
-                    ),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text(
-                '팝',
-                style: optionStyle1,
-              ),
-              onTap: () async {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MySongJanreScreen(
-                      janreData: '팝',
-                      janre: 'songJanre',
-                    ),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text(
-                '클래식',
-                style: optionStyle1,
-              ),
-              onTap: () async {
-                DbHelper helper = DbHelper();
-                await helper.openDb();
-                var result = await helper.searchList("클래식", "songJanre");
-                for (var element in result) {
-                  print(element);
-                }
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            GestureDetector(
-              child: Container(
-                child: const Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    "category 관리",
-                    style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20),
-                  ),
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MySongJanreCategoryScreen(),
-                  ),
-                );
-              },
-            )
-          ],
-        ),
-      ),
+      drawer: _drawer(),
       body: Consumer<MySongChangeNotifierProviderModel>(
         builder: (context, mySongCnprovider, child) {
           return Column(
             children: [
-              Text(
-                '현재 등록 된 곡수 : ${mySongCnprovider.myItems.length} 개',
-                style: const TextStyle(
-                    color: Colors.lightBlue,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    '총 곡수 : ${mySongCnprovider.myItems.length} 개',
+                    style: const TextStyle(
+                        color: Colors.lightBlue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Row(
+                    children: [
+                      const Text(
+                        '곡추가>>',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.red,
+                            fontWeight: FontWeight.w100),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const MySongAppendScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.add_to_queue),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(
                 height: 5,
@@ -310,6 +204,131 @@ class _SongsListScreenState extends State<SongsListScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _drawer() {
+    return Drawer(
+      width: MediaQuery.of(context).size.width * .5,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text(
+              '애창곡 jangre',
+              style: optionStyle,
+            ),
+          ),
+          ListTile(
+            title: const Text(
+              '발라드',
+              style: optionStyle1,
+            ),
+            onTap: () async {
+              print(Janre.BALLADE);
+              DbHelper helper = DbHelper();
+              await helper.openDb();
+              var result = await helper.searchList("발라드", "songJanre");
+              for (var element in result) {
+                print(element);
+              }
+            },
+          ),
+          ListTile(
+            title: const Text(
+              '댄스',
+              style: optionStyle1,
+            ),
+            onTap: () async {
+              DbHelper helper = DbHelper();
+              await helper.openDb();
+              var result = await helper.searchList("댄스", "songJanre");
+              for (var element in result) {
+                print(element);
+              }
+            },
+          ),
+          ListTile(
+            title: const Text(
+              '트로트',
+              style: optionStyle1,
+            ),
+            onTap: () async {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MySongJanreScreen(
+                    janreData: '트로트',
+                    janre: 'songJanre',
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              '팝',
+              style: optionStyle1,
+            ),
+            onTap: () async {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MySongJanreScreen(
+                    janreData: '팝',
+                    janre: 'songJanre',
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            title: const Text(
+              '클래식',
+              style: optionStyle1,
+            ),
+            onTap: () async {
+              DbHelper helper = DbHelper();
+              await helper.openDb();
+              var result = await helper.searchList("클래식", "songJanre");
+              for (var element in result) {
+                print(element);
+              }
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          GestureDetector(
+            child: Container(
+              child: const Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  "category 관리",
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+              ),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MySongJanreCategoryScreen(),
+                ),
+              );
+            },
+          )
+        ],
       ),
     );
   }
