@@ -154,10 +154,12 @@ class _SongsListScreenState extends State<SongsListScreen> {
                                 ),
                           );
                           // print('result : $result');
-                          if (result != null) {
-                            SongItem val = mySongCnprovider.myItems[index];
-                            val.songName = '${val.songName}--- $result';
-                            mySongCnprovider.editItem(val, index);
+                          if (result == "success") {
+                            var app =
+                                Provider.of<MySongChangeNotifierProviderModel>(
+                                    context,
+                                    listen: false);
+                            app.getAllSongs();
                           }
                         },
                       ),

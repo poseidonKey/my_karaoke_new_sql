@@ -59,6 +59,11 @@ class DbHelper {
         "update mysongs set songFavorite='$val' where id=${list.id}");
   }
 
+  Future<void> updateData(SongItem list) async {
+    await db!.rawUpdate(
+        "update mysongs set songName='${list.songName}', songTJNumber='${list.songTJNumber}', songGYNumber='${list.songGYNumber}', songUtubeAddress='${list.songUtubeAddress}', songETC='${list.songETC}', songJanre='${list.songJanre}', songFavorite='${list.songFavorite}' where id=${list.id}");
+  }
+
   Future<void> changeSongName(SongItem list, String val) async {
     await db!
         .rawUpdate("update mysongs set songName='$val' where id=${list.id}");

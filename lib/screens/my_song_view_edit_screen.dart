@@ -17,6 +17,11 @@ class _MySongAppendScreenState extends State<MySongViewEditScreen> {
   String? _songName, _songGYNumber, _songTJNumber, _songUtubeAddress, _songETC;
   final String _songFavorite = "false";
   String _selJanre = "";
+  @override
+  void initState() {
+    super.initState();
+    _selJanre = widget.song.songJanre;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,16 +218,16 @@ class _MySongAppendScreenState extends State<MySongViewEditScreen> {
       DbHelper helper = DbHelper();
       await helper.openDb();
       final newEventDetail = SongItem(
-          null,
+          widget.song.id,
           _songName!,
           _songGYNumber!,
           _songTJNumber!,
           _selJanre,
           _songUtubeAddress!,
           _songETC!,
-          "${DateTime.now().year}.${DateTime.now().month}.${DateTime.now().day}",
+          "",
           _songFavorite);
-      await helper.insertList(newEventDetail);
+      await helper.updateData(newEventDetail);
       Navigator.pop(context, 'success');
     } catch (e) {
       print(e);
