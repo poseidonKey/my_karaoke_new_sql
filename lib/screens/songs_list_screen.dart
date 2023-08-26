@@ -5,9 +5,9 @@ import 'package:my_karaoke_new_sql/screens/my_song_favority_screen.dart';
 import 'package:my_karaoke_new_sql/providers/my_song_changenotifier_provider_model.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_category_screen.dart';
 import 'package:my_karaoke_new_sql/screens/my_song_janre_screen.dart';
+import 'package:my_karaoke_new_sql/screens/my_song_view_edit_screen.dart';
 import 'package:provider/provider.dart';
 import '../db/db_helper.dart';
-import 'my_song_changenotifierprovider_edit_screen.dart';
 import 'my_song_search_screen.dart';
 
 class SongsListScreen extends StatefulWidget {
@@ -146,11 +146,12 @@ class _SongsListScreenState extends State<SongsListScreen> {
                           var result = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) =>
-                                  MySongChangeNotifierProviderEditScreen(
-                                choiceItem: index,
-                              ),
-                            ),
+                                builder: (_) => MySongViewEditScreen(
+                                    song: mySongCnprovider.myItems[index])
+                                //     MySongChangeNotifierProviderEditScreen(
+                                //   choiceItem: index,
+                                // ),
+                                ),
                           );
                           // print('result : $result');
                           if (result != null) {
