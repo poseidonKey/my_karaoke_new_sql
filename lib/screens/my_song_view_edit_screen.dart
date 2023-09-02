@@ -25,6 +25,8 @@ class _MySongAppendScreenState extends State<MySongViewEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('View_Edit screen'),
@@ -136,6 +138,7 @@ class _MySongAppendScreenState extends State<MySongViewEditScreen> {
                     vertical: 5.0,
                   ),
                   child: TextFormField(
+                    maxLines: null,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       filled: true,
@@ -150,33 +153,20 @@ class _MySongAppendScreenState extends State<MySongViewEditScreen> {
                     horizontal: 30.0,
                     vertical: 5.0,
                   ),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      filled: true,
-                      labelText: '특기사항',
+                  child: Expanded(
+                    child: TextFormField(
+                      // expands: true,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        filled: true,
+                        labelText: '특기사항',
+                      ),
+                      initialValue: widget.song.songETC,
+                      onSaved: (val) => _songETC = val ?? "",
                     ),
-                    initialValue: widget.song.songETC,
-                    onSaved: (val) => _songETC = val ?? "",
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(
-                //     horizontal: 30.0,
-                //     vertical: 5.0,
-                //   ),
-                //   child: TextFormField(
-                //     decoration: const InputDecoration(
-                //       border: OutlineInputBorder(),
-                //       filled: true,
-                //       labelText: '날짜',
-                //     ),
-                //     // readOnly: true,
-                //     enabled: false,
-                //     onSaved: (val) => _createTime =
-                //         "${DateTime.now().year}.${DateTime.now().month}.${DateTime.now().day}",
-                //   ),
-                // ),
                 const SizedBox(height: 20.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
